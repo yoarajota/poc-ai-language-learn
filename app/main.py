@@ -3,8 +3,7 @@ import pyaudio
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTextEdit, QLabel, QHBoxLayout, QPushButton
 from PyQt6.QtCore import pyqtSignal, QObject
 from PyQt6.QtGui import QFont, QColor, QPalette
-from websocket_client import WSClient
-
+from ws_client import WSClient
 class Communicator(QObject):
     new_message = pyqtSignal(str)
 
@@ -39,16 +38,13 @@ class RealTimeApp(QWidget):
 
         self.setLayout(layout)
 
-        # Set up communicator and websocket
         self.comm = Communicator()
         self.comm.new_message.connect(self.display_phrase)
         self.ws_client = WSClient(self.on_websocket_message)
 
-        # Audio streaming variables
         self.audio_stream = None
         self.is_streaming = False
 
-        # Apply a custom palette for the window
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor("#1C2833"))
         self.setPalette(palette)
