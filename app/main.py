@@ -1,9 +1,11 @@
 import sys
 import pyaudio
+import io
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTextEdit, QLabel, QHBoxLayout, QPushButton
 from PyQt6.QtCore import pyqtSignal, QObject
 from PyQt6.QtGui import QFont, QColor, QPalette
 from ws_client import WSClient
+
 class Communicator(QObject):
     new_message = pyqtSignal(str)
 
@@ -44,6 +46,7 @@ class RealTimeApp(QWidget):
 
         self.audio_stream = None
         self.is_streaming = False
+        self.audio_buffer = io.BytesIO()  # Buffer para armazenar os dados de áudio
 
         palette = self.palette()
         palette.setColor(QPalette.ColorRole.Window, QColor("#1C2833"))
@@ -85,11 +88,21 @@ class RealTimeApp(QWidget):
         if self.audio:
             self.audio.terminate()
 
-    def audio_callback(self, in_data, frame_count, time_info, status):
-        print("Audio callback triggered!")
+        # Limpa o buffer ao parar o streaming
+        self.audio_buffer.seek(0)
+        self.audio_buffer.truncate(0)
 
+    def audio_callback(self, in_data, frame_count, time_info, status):
+        """
+        Callback de áudio para capturar dados e enviá-los ao backend.
+        """
         if self.is_streaming:
-            self.ws_client.send_audio(in_data)
+            self.audio_buffer.write(in_data)
+
+            self.ws_client.send_audio(self.audio_buffer.getvalue())
+
+            self.audio_buffer.seek(0)
+            self.audio_buffer.truncate(0)
 
         return (in_data, pyaudio.paContinue)
 
