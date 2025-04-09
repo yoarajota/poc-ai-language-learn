@@ -1,19 +1,13 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.testclient import TestClient
 from models.whisper import WhisperModel
-import os
-from dotenv import load_dotenv, find_dotenv
-
-# Load environment variables
-load_dotenv(find_dotenv())
-PORT = int(os.getenv("WS_SERVER_PORT", 8765))
 
 app = FastAPI()
 
 Whisper = WhisperModel()
 
 async def process_audio(audio_data_in_bytes):
-    print(f"Received audio data of length: {len(audio_data_in_bytes)} bytes")
     transcription = Whisper.transcribe(audio_data_in_bytes)
     return transcription
 
@@ -31,4 +25,15 @@ async def websocket_endpoint(websocket: WebSocket):
     except Exception as e:
         print(f"Error: {e}")
         await websocket.close()
-        
+
+def test_read_main():
+    client = TestClient(app)
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"msg": "Hello World"}
+
+def test_websocket():
+    client = TestClient(app)
+    with client.websocket_connect("/ws") as websocket:
+        data = websocket.receive_json()
+        assert data == {"msg": "Hello WebSocket"}

@@ -2,24 +2,25 @@ import whisper
 import numpy as np
 import io
 import soundfile as sf
+import os
+import datetime
 
 class WhisperModel:
     def __init__(self, model_name="base"):
         self.model = whisper.load_model(model_name)
 
     def transcribe(self, audio_bytes, sample_rate=16000):
-        try:
-            audio, file_sample_rate = sf.read(io.BytesIO(audio_bytes), dtype="float32")
-        except sf.LibsndfileError:
-            # If the format is not recognized, assume raw PCM data
-            print("Unrecognized audio format. Attempting to process as raw PCM data...")
-            audio = np.frombuffer(audio_bytes, dtype=np.int16).astype(np.float32) / 32768.0
-            file_sample_rate = sample_rate
 
-        if file_sample_rate != 16000:
-            audio = whisper.audio.resample(audio, file_sample_rate, 16000)
+        audio = np.frombuffer(audio_bytes, dtype=np.int16).astype(np.float32) / 32768.0
 
-        audio = whisper.pad_or_trim(audio)
+        time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        temp_audio_path = f"models/whisper/temp/{time}.wav"
+        
+        if not os.path.exists("models/whisper/temp"):
+            os.makedirs("models/whisper/temp")
+
+        with open(temp_audio_path, "wb") as f:
+            sf.write(f, audio, sample_rate, format='WAV')
 
         result = self.model.transcribe(audio, language="en", fp16=False)
 

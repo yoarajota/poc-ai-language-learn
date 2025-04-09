@@ -1,0 +1,8 @@
+## ACTIVATE VENV
+.venv\Scripts\Activate.ps1
+
+## FASTAPI RUN
+fastapi dev manin.py
+
+## FREEZE PIP
+pip3 freeze > requirements.txt
