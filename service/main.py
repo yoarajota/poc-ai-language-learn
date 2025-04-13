@@ -2,13 +2,20 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.testclient import TestClient
 from models.whisper import WhisperModel
+from models.soundchoise import SoundChoiceG2PModel
+import asyncio
 
 app = FastAPI()
 
 Whisper = WhisperModel()
+SoundChoiceG2P = SoundChoiceG2PModel()
 
 async def process_audio(audio_data_in_bytes):
     transcription = Whisper.transcribe(audio_data_in_bytes)
+    transcriptionGrapheme = SoundChoiceG2P.text_to_phonemes(transcription)
+
+    print(transcription, transcriptionGrapheme)
+
     return transcription
 
 @app.websocket("/ws")

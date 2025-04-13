@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    container_name: service-language-learning
+    command: fastapi run main.py
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/app
+
+  dev:
+    build: .
+    container_name: service-language-learning-dev
+    command: fastapi dev main.py
+    ports:
+      - "8002:8002"
+    volumes:
+      - .:/app
