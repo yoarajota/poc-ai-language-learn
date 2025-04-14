@@ -12,7 +12,15 @@ services:
     build: .
     container_name: service-language-learning-dev
     command: fastapi dev main.py
+    restart: always
     ports:
       - "8002:8002"
     volumes:
       - .:/app
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /code/app
+        - action: rebuild
+          path: requirements.txt

@@ -18,6 +18,10 @@ async def process_audio(audio_data_in_bytes):
 
     return transcription
 
+@app.post("/hello")
+async def hello():
+    return {"msg": "Hello World"}
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
