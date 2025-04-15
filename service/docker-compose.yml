@@ -1,12 +1,12 @@
 services:
-  app:
-    build: .
-    container_name: service-language-learning
-    command: fastapi run main.py
-    ports:
-      - "8001:8001"
-    volumes:
-      - .:/app
+  # app:
+  #   build: .
+  #   container_name: service-language-learning
+  #   command: fastapi run main.py
+  #   ports:
+  #     - "8001:8001"
+  #   volumes:
+  #     - .:/app
 
   dev:
     build: .
@@ -20,7 +20,17 @@ services:
     develop:
       watch:
         - action: sync
-          path: .
+          path: ./app
           target: /code/app
+          ignore:
+            - .git
+            - __pycache__
+            - .pytest_cache
+            - .mypy_cache
+            - .venv
+            - .idea
+            - .vscode
+            - node_modules
+
         - action: rebuild
           path: requirements.txt
