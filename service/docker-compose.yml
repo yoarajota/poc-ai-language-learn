@@ -1,36 +1,32 @@
-services:
-  # app:
-  #   build: .
-  #   container_name: service-language-learning
-  #   command: fastapi run main.py
-  #   ports:
-  #     - "8001:8001"
-  #   volumes:
-  #     - .:/app
+version: '3.8'
 
+services:
   dev:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: service-language-learning-dev
-    command: fastapi dev main.py
-    restart: always
+    command: fastapi dev main.py --host 0.0.0.0 --port 8002
+    restart: unless-stopped
     ports:
       - "8002:8002"
     volumes:
-      - .:/app
+      - ./app:/app
     develop:
       watch:
         - action: sync
           path: ./app
-          target: /code/app
+          target: /app
           ignore:
-            - .git
-            - __pycache__
-            - .pytest_cache
-            - .mypy_cache
-            - .venv
-            - .idea
-            - .vscode
-            - node_modules
-
+            - .git/
+            - __pycache__/
+            - .pytest_cache/
+            - .mypy_cache/
+            - .venv/
+            - .idea/
+            - .vscode/
+            - node_modules/
         - action: rebuild
-          path: requirements.txt
+          path: ./requirements.txt
+        - action: rebuild
+          path: ./Dockerfile
