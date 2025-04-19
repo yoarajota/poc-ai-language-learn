@@ -14,8 +14,6 @@ This is a **real-time desktop application** built with **Python + PyQt6** that c
 
 ## 🖼️ Preview
 
-![app-screenshot](docs/screenshot.png) *(optional)*
-
 ---
 
 ## 🛠️ Tech Stack
