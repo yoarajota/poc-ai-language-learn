@@ -3,16 +3,11 @@ import platform
 
 class SoundChoiceG2PModel:
     def __init__(self):
+        print("Loading SoundChoice G2P model...")
 
-        if platform.system() == "Windows":
-            download_options = {"save_folder": "pretrained_models/soundchoice-g2p", "overwrite": False, "symlink_strategy": "copy"}
-        else:
-            download_options = {"save_folder": "pretrained_models/soundchoice-g2p", "overwrite": False}
-            
         self.g2p = GraphemeToPhoneme.from_hparams(
             source="speechbrain/soundchoice-g2p", 
             savedir="pretrained_models/soundchoice-g2p",
-            download_options=download_options
         )
 
     def text_to_phonemes(self, text):

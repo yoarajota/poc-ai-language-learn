@@ -1,5 +1,5 @@
 ## ACTIVATE VENV
-.venv\Scripts\Activate.ps1
+.venv\Scripts\Activate.ps1 | source .venv/bin/activate
 
 ## FASTAPI RUN
 fastapi dev main.py
