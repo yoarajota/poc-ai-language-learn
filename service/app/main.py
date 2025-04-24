@@ -14,7 +14,8 @@ async def process_audio(audio_data_in_bytes):
     transcription = Whisper.transcribe(audio_data_in_bytes)
     transcriptionGrapheme = SoundChoiceG2P.text_to_phonemes(transcription)
 
-    print(transcription, transcriptionGrapheme)
+    # spellcheck it and then transform in grapheme again
+    # 
 
     return transcription
 
@@ -31,6 +32,7 @@ async def websocket_endpoint(websocket: WebSocket):
             message = await websocket.receive_bytes()
             transcription = await process_audio(message)
             await websocket.send_text(transcription)
+
     except WebSocketDisconnect:
         print("Client disconnected")
     except Exception as e:
