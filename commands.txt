@@ -9,3 +9,6 @@ pip3 freeze > requirements.txt
 
 ## INSTALL FROM requirements.txt
 pip3 install -r app/requirements.txt
+
+## INIT VENV
+python3 -m venv .venv
