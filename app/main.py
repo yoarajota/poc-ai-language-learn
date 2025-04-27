@@ -6,8 +6,10 @@ import time
 from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QTextEdit, 
                             QLabel, QHBoxLayout, QPushButton, QSlider, 
                             QGroupBox, QGridLayout, QProgressBar, QFrame, QLayout)
-from PyQt6.QtCore import pyqtSignal, QObject, Qt
+from PyQt6.QtCore import pyqtSignal, QObject, Qt, QBuffer, QIODevice
 from PyQt6.QtGui import QFont, QColor, QPalette
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimediaWidgets import QVideoWidget
 from ws_client import WSClient
 
 class Communicator(QObject):
@@ -126,6 +128,11 @@ class RealTimeApp(QWidget):
         self.audio_button.setStyleSheet("background-color: #34495E; color: #ECF0F1; padding: 10px;")
         self.audio_button.clicked.connect(self.toggle_audio_streaming)
         layout.addWidget(self.audio_button)
+
+        # Player de áudio
+        self.audio_output = QAudioOutput()
+        self.media_player = QMediaPlayer()
+        self.media_player.setAudioOutput(self.audio_output)
 
         self.setLayout(layout)
 
@@ -271,7 +278,27 @@ class RealTimeApp(QWidget):
         self.rms_bar.setValue(rms_percent)
 
     def on_websocket_message(self, message):
-        self.comm.new_message.emit(message)
+        try:
+            # Parse the message
+            audio_data = message.get("audio")
+            transcription = message.get("transcription")
+            checked = message.get("checked")
+
+            # Display the transcription and corrected text
+            self.text_area.append(f"Original: {transcription}")
+            self.text_area.append(f"Corrected: {checked}")
+
+            # Play the audio
+            if audio_data:
+                audio_buffer = QBuffer()
+                audio_buffer.setData(audio_data)
+                audio_buffer.open(QIODevice.OpenModeFlag.ReadOnly)
+
+                self.media_player.setSource(audio_buffer)
+                self.media_player.play()
+
+        except Exception as e:
+            print(f"Error processing WebSocket message: {e}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
