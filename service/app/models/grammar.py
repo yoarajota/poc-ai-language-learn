@@ -24,4 +24,4 @@ class GrammarCorrectionModel:
             return result.text
         except Exception as e:
             print(f"Error in correct_grammar: {e}")
-            return ""
+            return None
