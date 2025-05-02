@@ -34,7 +34,6 @@ class SoundChoiceG2PModel:
             
             return phonemes
         except Exception as e:
-            print(f"Error in text_to_phonemes: {e}")
             return []
     
     def get_phonetic_representation(self, text):
@@ -51,5 +50,4 @@ class SoundChoiceG2PModel:
             else:
                 return str(phonemes)
         except Exception as e:
-            print(f"Error in get_phonetic_representation: {e}")
             return ""

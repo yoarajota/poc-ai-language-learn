@@ -23,7 +23,6 @@ phonemes = g2p(text)
 
 # Grammar Correction Models:
 
-
 ## Try n1: T5 Grammar Correction Model Summary
 
 The **T5 Grammar Correction** model is a pretrained text-to-text transformer designed to correct grammatical errors in English sentences. It was trained using the **Happy Transformer** library on the **JFLEG dataset**, which is specifically designed for grammatical error correction tasks. The model generates revised versions of input text with fewer grammatical errors.
