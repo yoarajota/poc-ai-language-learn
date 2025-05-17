@@ -1,3 +1,4 @@
+import base64
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.testclient import TestClient
@@ -14,24 +15,28 @@ Whisper = WhisperModel()
 SoundChoiceG2P = SoundChoiceG2PModel()
 Grammar = GrammarCorrectionModel()
 
-async def process_audio(audio_data_in_bytes):
-    transcription = Whisper.transcribe(audio_data_in_bytes)
+async def handle_audio(audio_data_in_bytes):
+    print("Received audio data")
 
-    # Check grammar and correct if necessary
+    transcription = Whisper.transcribe(audio_data_in_bytes)
     checked = Grammar.correct_grammar(transcription)
 
-    if checked != transcription:
+    if checked.lower().strip() != transcription.lower().strip():
         print("Grammar correction applied")
-        checked_phonemes = SoundChoiceG2P.text_to_phonemes(checked)
 
         # Generate audio for the corrected text
         audio_buffer = io.BytesIO()
-        tts = gtts.gTTS(checked_phonemes, lang="en", slow=False)
+        tts = gtts.gTTS(checked, lang="en", slow=False)
         tts.write_to_fp(audio_buffer)
         audio_buffer.seek(0)
 
+        audio_base64 = base64.b64encode(audio_buffer.getvalue()).decode("utf-8")
+
+        print("Audio generated for corrected text")
+        print(transcription)
+
         return {
-            "audio": audio_buffer.getvalue(),
+            "audio": audio_base64,
             "transcription": transcription,
             "checked": checked
         }
@@ -50,7 +55,9 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             message = await websocket.receive_bytes()
 
-            result = await process_audio(message)
+            result = await handle_audio(message)
+
+            print("Result from handle_audio:", result)
 
             if result:
                 await websocket.send_json(result)

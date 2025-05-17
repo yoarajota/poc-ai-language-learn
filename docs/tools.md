@@ -45,3 +45,6 @@ tts.save("example.mp3")
 os.system("mpg321 example.mp3")
 
 ```
+
+### Conclusion
+Using gTTS, I cannot use phonemes, only raw text. 

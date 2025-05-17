@@ -3,6 +3,8 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from threading import Thread
 import time
+import json
+import base64
 
 class WSClient:
     def __init__(self, on_message):
@@ -30,8 +32,30 @@ class WSClient:
     def _listen(self):
         try:
             while self.is_running and self.ws:
+                print("Listening for messages...")
+                # Receive a message from the WebSocket server
                 message = self.ws.recv()
-                self.on_message(message)
+
+                if message:
+                    print(message)
+
+                    try:
+                        # Attempt to parse the message as JSON
+                        json_message = json.loads(message)
+
+                        # Check if the message contains Base64 audio
+                        if "audio" in json_message:
+                            audio_base64 = json_message["audio"]
+                            audio_bytes = base64.b64decode(audio_base64)  # Decode Base64 to raw bytes
+                            json_message["audio"] = audio_bytes  # Replace Base64 with raw bytes
+                            print("Audio decoded from Base64.")
+
+                        # Pass the processed message to the on_message callback
+                        self.on_message(json_message)
+                    except json.JSONDecodeError:
+                        print("Message is not JSON. Passing as-is.")
+                        self.on_message(message)
+
         except Exception as e:
             print(f"Error while listening to WebSocket: {e}")
             self.ws = None
