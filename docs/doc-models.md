@@ -50,6 +50,3 @@ result = happy_tt.generate_text("grammar: This sentences has has bads grammar.",
 print(result.text) # Output: "This sentence has bad grammar."
 
 ```
-
-### CONCLUTION TEST USING GRAMMAR CORRECTION
-Using g2p conversion followed by grammar correction doesn't feel quite right. This approach can produce sentences that lack proper meaning, which grammar correction alone may not be able to resolve.
