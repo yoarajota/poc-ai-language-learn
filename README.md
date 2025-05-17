@@ -2,6 +2,9 @@
 
 A **real-time desktop application** built with **Python + PyQt6** that corrects speech pronunciation by processing live audio, transcribing it into text, refining it with a Large Language Model (LLM), comparing phonetic representations, and providing auditory feedback via Text-to-Speech (TTS). The app connects to a WebSocket server to display incoming phrases in real time.
 
+## CURRENT TRYED APPROACH
+### Conclusion: this approach is not optimal/functional.
+
 ## 🚀 Features
 
 - **Real-Time Speech Processing**: Captures live audio, segments it into phrases, and transcribes using Speech-to-Text (STT).
@@ -11,12 +14,6 @@ A **real-time desktop application** built with **Python + PyQt6** that corrects 
 - **WebSocket Integration**: Connects to a WebSocket server for real-time phrase updates.
 - **Thread-Safe Communication**: Ensures smooth interaction between WebSocket, UI, and processing threads using PyQt Signals and QThread.
 - **Iterative Learning**: Allows users to repeat phrases and refine pronunciation through feedback loops.
-
----
-
-## 🖼️ Preview
-
-![app-screenshot](docs/screenshot.png) *(Placeholder for actual screenshot)*
 
 ---
 
