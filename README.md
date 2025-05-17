@@ -1,9 +1,10 @@
 # Speech Pronunciation Correction Desktop App
+A **real-time desktop application** built with **Python + PyQt6** that corrects speech pronunciation by processing live audio!
 
-A **real-time desktop application** built with **Python + PyQt6** that corrects speech pronunciation by processing live audio, transcribing it into text, refining it with a Large Language Model (LLM), comparing phonetic representations, and providing auditory feedback via Text-to-Speech (TTS). The app connects to a WebSocket server to display incoming phrases in real time.
+## ⚠️ Current Status: Experimental & Non-Functional Approach
 
-## CURRENT TRYED APPROACH
-### Conclusion: this approach is not optimal/functional.
+> **Important:**
+> The approach illustrated by this README.MD is not optimal/functional. When found the right approach, this doccument will be updated.
 
 ## 🚀 Features
 
@@ -117,3 +118,5 @@ Contributions are welcome! Please:
 ## 📜 License
 
 This project is licensed under the MIT License.
+
+
