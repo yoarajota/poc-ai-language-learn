@@ -11,6 +11,8 @@ Sphinx is a continuous-speech, speaker-independent recognition system making use
 - Align and Compare: Align the audio with the expected phonetic sequence to detect errors, like substituting “th” with “s” in “think.”
 - Provide Feedback: Use Text-to-Speech (TTS) to play the correct pronunciation and highlight mistakes in the UI, allowing users to practice and improve.
 
+- **References**
+  - [CMUSphinx](https://www.youtube.com/watch?v=1zf_-GuMboA)
 
 <!-- LINK TO LINKEDIN POST BRAINSTORM -->
 
